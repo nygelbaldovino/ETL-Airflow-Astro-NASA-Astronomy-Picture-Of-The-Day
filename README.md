@@ -19,8 +19,35 @@ This project implements an automated ETL (Extract, Transform, Load) pipeline usi
 - **Orchestrate**: Manage the entire workflow using Apache Airflow's scheduling and monitoring capabilities
 
 ## Architecture
-```python
-NASA APOD API → Airflow (ETL Orchestration) → PostgreSQL Database
+```text
+╔═══════════════════════════════════════════════════════════════════╗
+║                      ETL PIPELINE WORKFLOW                        ║
+╚═══════════════════════════════════════════════════════════════════╝
+
+    ╔══════════════════════════════════════════════════════════╗
+    ║  1. CREATE TABLE                                         ║
+    ║     └── PostgreSQL table creation if not exists          ║
+    ╚══════════════════════════════════════════════════════════╝
+                              ⬇
+    ╔══════════════════════════════════════════════════════════╗
+    ║  2. EXTRACT                                              ║
+    ║     └── NASA APOD API → HttpOperator → JSON response     ║
+    ╚══════════════════════════════════════════════════════════╝
+                              ⬇
+    ╔══════════════════════════════════════════════════════════╗
+    ║  3. TRANSFORM                                            ║
+    ║     └── Parse JSON → Select fields → Format for DB       ║
+    ╚══════════════════════════════════════════════════════════╝
+                              ⬇
+    ╔══════════════════════════════════════════════════════════╗
+    ║  4. LOAD                                                 ║
+    ║     └── PostgresHook → INSERT into PostgreSQL table      ║
+    ╚══════════════════════════════════════════════════════════╝
+                              ⬇
+    ╔══════════════════════════════════════════════════════════╗
+    ║  5. ORCHESTRATE                                          ║
+    ║     └── Apache Airflow on Astro → Daily schedule         ║
+    ╚══════════════════════════════════════════════════════════╝
 ```
 
 ### Key Technologies
@@ -33,7 +60,7 @@ NASA APOD API → Airflow (ETL Orchestration) → PostgreSQL Database
 ```bash
 etl-pipeline-airflow/
 ├── dags/                    # Airflow DAG definitions
-│   └── nasa_apod_etl.py    # Main ETL pipeline DAG
+│   └── apod-etl.py    # Main ETL pipeline DAG
 ├── docker-compose.yml      # Multi-container setup
 ├── Dockerfile              # Airflow image customization
 ├── plugins/               # Custom Airflow operators/hooks
