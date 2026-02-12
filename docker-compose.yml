@@ -1,0 +1,23 @@
+version: '3'
+services:
+  postgres:
+    image: postgres:13 ## Called from the docker hub
+    container_name: postgres_db ## Check the docker desktop
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    ports:
+      - '5432:5432' ## Host for local ports
+    volumes:
+      - postgres_data:/var/lib/postgresql/postgres_data ## The path where information is saved
+    networks:
+      - airflow_network
+
+## Since 2 dockers will interact, create a common network
+networks:
+  airflow_network:
+    external: false
+
+volumes:
+  postgres_data:
