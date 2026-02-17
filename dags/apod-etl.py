@@ -36,7 +36,6 @@ with DAG(
 
 
     ## Task 2: Extract the NASA API Data (APOD) [Extract Pipeline]
-    ## https://api.nasa.gov/planetary/apod?api_key=VQP7F1ZI4wt4QtAXd6xeGIEMXCHk4EaPWqRxmfeA
     extract_apod = HttpOperator(
         task_id = 'extract_apod',
         http_conn_id = 'nasa_api', ## Will map to "api.nasa.gov" URL. Connection ID Defined in Airflow for NASA API

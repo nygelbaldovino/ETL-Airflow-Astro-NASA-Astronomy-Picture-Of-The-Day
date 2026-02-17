@@ -2,7 +2,7 @@ version: '3'
 services:
   postgres:
     image: postgres:13 ## Called from the docker hub
-    container_name: postgres_db ## Check the docker desktop
+    container_name: apod_postgres_db ## Check the docker desktop
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
@@ -20,4 +20,4 @@ networks:
     external: false
 
 volumes:
-  postgres_data:
+  apod_postgres_data:
